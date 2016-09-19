@@ -66,12 +66,12 @@ void run_atomics_reducer(int *h_data){
 
   float mbytes = NUM_THREADS_PER_BLOCK*NUM_BLOCKS*sizeof(int)*1e-6;
 
-  std::cout << "Megabytes of data = " << mbytes << std::endl;
+  std::cout << "Megabytes of data " << mbytes << std::endl;
 
    float bandwidth = mbytes/atomics_timer.getElapsedTime()*1e3;
 
    #ifdef WORST_CASE
-   std::cout << "Running worst case scenario where all data fall into a single bin " << std::endl;
+   std::cout << "Running worst case scenario where all data falls into a single bin " << std::endl;
    #else 
    std::cout << "Running for case where data is distributed randomly into " << NUM_BINS << " bins " << std::endl;
    #endif 
@@ -86,7 +86,7 @@ void run_atomics_reducer(int *h_data){
 
   for(int i=0; i<NUM_BINS; i++){
     std::cout <<  std::setw(4) << i << " " <<  std::setw(6) << h_result[i] 
-	      << " " << std::setw(6) << h_result_atomics[i] << std::endl;
+	      << " " << std::setw(7) << h_result_atomics[i] << std::endl;
     }
 
   
@@ -105,7 +105,7 @@ int main()
   int *h_data; 
   h_data = new int[NUM_THREADS_PER_BLOCK*NUM_BLOCKS];
 
-  std::cout << "dimensions " << NUM_THREADS_PER_BLOCK * NUM_BLOCKS << std::endl;
+  std::cout << "Data Size " << NUM_THREADS_PER_BLOCK * NUM_BLOCKS << std::endl;
 
   for(int i=0; i<NUM_THREADS_PER_BLOCK*NUM_BLOCKS; i++){
 #ifdef WORST_CASE //worst case scenario when all pixels fall into a single bin
