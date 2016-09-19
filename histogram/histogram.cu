@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cuda.h>
+#include <iomanip>
 #include <Timer.h>
 
 //histogram with N bins in several blocks 
@@ -8,11 +9,8 @@
 //then do a coalesced write to global memory (atomicAdd)
 
 const long int NUM_BLOCKS=256;
-#define WARP_SIZE 32 
 #define NUM_BINS 32
 #define NUM_THREADS_PER_BLOCK 256
-#define NUM_WARPS_PER_BLOCK NUM_THREADS_PER_BLOCK/WARP_SIZE
-#define BIN_UNROLL 8
 
 
 __global__ void shmem_atomics_reducer(int *data, int *count){
@@ -64,20 +62,31 @@ void run_atomics_reducer(int *h_data){
   cudaMemcpy(h_result_atomics, d_result_atomics, NUM_BINS*sizeof(int), cudaMemcpyDeviceToHost);
 
   std::cout << "======================================" << std::endl;
-  std::cout << "atomics time " << atomics_timer.getElapsedTime() << std::endl;
+  std::cout << "atomics time in milliseconds " << atomics_timer.getElapsedTime() << std::endl;
 
   float mbytes = NUM_THREADS_PER_BLOCK*NUM_BLOCKS*sizeof(int)*1e-6;
 
-  std::cout << "MB = " << mbytes << std::endl;
+  std::cout << "Megabytes of data = " << mbytes << std::endl;
 
    float bandwidth = mbytes/atomics_timer.getElapsedTime()*1e3;
 
-  std::cout << "atomics bandwidth " << bandwidth << std::endl;
+   #ifdef WORST_CASE
+   std::cout << "Running worst case scenario where all data fall into a single bin " << std::endl;
+   #else 
+   std::cout << "Running for case where data is distributed randomly into " << NUM_BINS << " bins " << std::endl;
+   #endif 
+
+  std::cout << "Atomics bandwidth in MB/s " << bandwidth << std::endl;
 
 
+  std::cout << "Validation: " << std::endl;
+  std::cout << std::setw(4) << "BIN#" 
+	    << std::setw(7) << "HOST"
+	    << std::setw(9) << "DEVICE" << std::endl;
 
   for(int i=0; i<NUM_BINS; i++){
-    std::cout << h_result[i] << " " << h_result_atomics[i] << std::endl;
+    std::cout <<  std::setw(4) << i << " " <<  std::setw(6) << h_result[i] 
+	      << " " << std::setw(6) << h_result_atomics[i] << std::endl;
     }
 
   
@@ -106,7 +115,6 @@ int main()
 #endif
   }
 
-  std::cout << "NUM_WARPS_PER_BLOCK " << NUM_WARPS_PER_BLOCK << std::endl;
   run_atomics_reducer(h_data);
 
 
