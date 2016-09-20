@@ -1,4 +1,4 @@
-# atomics_samples
+# atomics_benchmarks
 Benchmark to calculate atomics bandwidth in different GPU architectures. 
 It computes a histogram of values that fall into a number of bins. 
 The worst case performance scenario occurs when all the data falls into
@@ -22,7 +22,7 @@ Building for the worst case. This is set in histogram/CMakeLists by passing the 
 
 We also set the flags defined on top of the histogram.cu file. 
 
-The following flags are of interest:
+The following flags are of interest: <br>
 NUM_BLOCKS <br>
 NUM_BINS   <br> 
 NUM_THREADS_PER_BLOCK <br>
