@@ -1,5 +1,5 @@
 # atomics_benchmarks
-Benchmark to calculate atomics bandwidth in different GPU architectures. It should give a *rough* measure of shared memory atomics performance in various GPU architectures. We emphasize 'rough' because both global and shared memory atomics operations are involved. Nevertheless, for the operation in question - that of computing a histogram - this is a plausible approach both in terms of ease of programmability and, we think, in elucidating the use if atomics as the feature of choice for this task. Nevertheless, it is likely there would be ample room for optimization opportunities in its implementation. 
+Benchmark to calculate atomics bandwidth in different GPU architectures. It should give a *rough* measure of shared memory atomics performance in various GPU architectures. We emphasize 'rough' because both global and shared memory atomics operations are involved. Nevertheless, for the operation in question - that of computing a histogram - this is a plausible approach both in terms of ease of programmability and, we think, in elucidating the use if atomics as the feature of choice for this task. It is likely there might be ample room for optimization opportunities in its implementation. 
 
    
 It computes a histogram of values that fall into a number of bins. 
