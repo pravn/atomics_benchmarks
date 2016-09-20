@@ -46,10 +46,17 @@ void run_atomics_reducer(int *h_data){
   cudaMemset(d_result_atomics, 0, NUM_BINS*sizeof(int));
 
   CUDATimer atomics_timer;
+  double time = 0;
+  int niter = 10;
 
-  atomics_timer.startTimer();
-  shmem_atomics_reducer<<< NUM_BLOCKS, NUM_THREADS_PER_BLOCK>>> (d_data, d_result_atomics);
-  atomics_timer.stopTimer();
+
+  for(int i=0; i<niter; i++){
+	  cudaMemset(d_result_atomics, 0, NUM_BINS*sizeof(int));
+	  atomics_timer.startTimer();
+	  shmem_atomics_reducer<<< NUM_BLOCKS, NUM_THREADS_PER_BLOCK>>> (d_data, d_result_atomics);
+	  atomics_timer.stopTimer();
+	  time  += atomics_timer.getElapsedTime();
+  }
 
   for(int i=0; i<NUM_THREADS_PER_BLOCK*NUM_BLOCKS; i++){
     for(int j=0; j<NUM_BINS; j++){
@@ -62,13 +69,13 @@ void run_atomics_reducer(int *h_data){
   cudaMemcpy(h_result_atomics, d_result_atomics, NUM_BINS*sizeof(int), cudaMemcpyDeviceToHost);
 
   std::cout << "======================================" << std::endl;
-  std::cout << "atomics time in milliseconds " << atomics_timer.getElapsedTime() << std::endl;
+  std::cout << "average atomics time in milliseconds " << time/niter << std::endl;
 
   float mbytes = NUM_THREADS_PER_BLOCK*NUM_BLOCKS*sizeof(int)*1e-6;
 
   std::cout << "Megabytes of data " << mbytes << std::endl;
 
-   float bandwidth = mbytes/atomics_timer.getElapsedTime()*1e3;
+   float bandwidth = mbytes/time*niter*1e3;
 
    #ifdef WORST_CASE
    std::cout << "Running worst case scenario where all data falls into a single bin " << std::endl;
