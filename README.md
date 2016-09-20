@@ -23,9 +23,9 @@ Building for the worst case. This is set in histogram/CMakeLists by passing the 
 We also set the flags defined on top of the histogram.cu file. 
 
 The following flags are of interest:
-NUM_BLOCKS 
-NUM_BINS 
-NUM_THREADS_PER_BLOCK
+NUM_BLOCKS <br>
+NUM_BINS   <br> 
+NUM_THREADS_PER_BLOCK <br>
 
 
 Running:
