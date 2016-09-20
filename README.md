@@ -45,7 +45,7 @@ NUM_BLOCKS=256 <br>
 NUM_BINS=32    <br>
 NUM_THREADS_PER_BLOCK=256
 
-Quadro M4000M (Maxwell sm_52) - 12.0 GB/s
+Quadro M4000M (Maxwell sm_52) - 16.0 GB/s
 Quadro K5100M (Kepler  sm_30) -  1.1 GB/s
 Drive PX2     (Pascal  sm_62) -  3.5 GB/s
 
