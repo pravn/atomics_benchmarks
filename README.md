@@ -8,7 +8,7 @@ GPU algorithm:
 The calculation is performed in the shmem_atomics_reducer kernel. We accumulate histogram values into bin variables in shared memory using atomicAdd. These are then written to global memory in coalesced fashion.
 
 
-Building:
+#Building
 Create a build directory and configure with cmake.
 
 mkdir bld <br>
@@ -28,7 +28,7 @@ NUM_BINS   <br>
 NUM_THREADS_PER_BLOCK <br>
 
 
-#Running:
+#Running
 The executable will build in <build-dir>/histogram.
 Run as follows:
 cd <build-dir>/histogram
