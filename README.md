@@ -11,8 +11,8 @@ The calculation is performed in the shmem_atomics_reducer kernel. We accumulate 
 Building:
 Create a build directory and configure with cmake.
 
-mkdir bld
-cmake <path/to/src>
+mkdir bld <br>
+cmake \<path\/to\/src\>
 
 We might have to modify paths to CUDA toolkit directory in CMakeLists. The gpu architecture flags will also need modification depending on the hardware it is run on. 
 
