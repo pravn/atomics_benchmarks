@@ -1,11 +1,13 @@
 # atomics_benchmarks
-Benchmark to calculate atomics bandwidth in different GPU architectures. 
+Benchmark to calculate atomics bandwidth in different GPU architectures. It should give a *rough* measure of shared memory atomics performance in various GPU architectures. We emphasize 'rough' because both global and shared memory atomics operations are involved. Nevertheless, for the operation in question - that of computing a histogram - this is a plausible approach both in terms of ease of programmability and, we think, in elucidating the use if atomics as the feature of choice for this task. Nevertheless, it is likely there would be ample room for optimization opportunities in its implementation. 
+
+   
 It computes a histogram of values that fall into a number of bins. 
 The worst case performance scenario occurs when all the data falls into
 a single bin (bin 0). This is turned on (which is the default) by setting the WORST_CASE flag (see in 'building' below. The other, more favorable scenario (remove the WORST_CASE flag in cmake) has the data being generated such that the bins are selected randomly from 0 to NUM_BINS-1. 
 
 **GPU algorithm**:
-The calculation is performed in the shmem_atomics_reducer kernel. We accumulate histogram values into bin variables in shared memory using atomicAdd. These are then written to global memory in coalesced fashion.
+The calculation is performed in the shmem_atomics_reducer kernel. We accumulate histogram values into bin variables in shared memory using atomicAdd (shared memory atomics). These are then written to global memory in coalesced fashion.
 
 
 #Building
