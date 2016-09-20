@@ -4,7 +4,7 @@ It computes a histogram of values that fall into a number of bins.
 The worst case performance scenario occurs when all the data falls into
 a single bin (bin 0). This is turned on (which is the default) by setting the WORST_CASE flag (see in 'building' below. The other, more favorable scenario (remove the WORST_CASE flag in cmake) has the data being generated such that the bins are selected randomly from 0 to NUM_BINS-1. 
 
-GPU algorithm:
+**GPU algorithm**:
 The calculation is performed in the shmem_atomics_reducer kernel. We accumulate histogram values into bin variables in shared memory using atomicAdd. These are then written to global memory in coalesced fashion.
 
 
