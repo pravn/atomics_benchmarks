@@ -46,9 +46,9 @@ NUM_BLOCKS=256 <br>
 NUM_BINS=32    <br>
 NUM_THREADS_PER_BLOCK=256
 
-Quadro M4000M (Maxwell sm_52) - 16.0 GB/s
-Quadro K5100M (Kepler  sm_30) -  1.1 GB/s
-Drive PX2     (Pascal  sm_62) -  4.0 GB/s
+Quadro M4000M (Maxwell sm_52) - 16.0 GB/s <br>
+Quadro K5100M (Kepler  sm_30) -  1.1 GB/s <br>
+Drive PX2     (Pascal  sm_62) -  4.0 GB/s <br>
 
 2. More performant case with output generated to fall into any one of the bins randomly <br>
 Case with least contention <br>
@@ -59,9 +59,9 @@ NUM_BLOCKS=256 <br>
 NUM_BINS=32    <br>
 NUM_THREADS_PER_BLOCK=256
 
-Quadro M4000M (Maxwell sm_52) - 28 GB/s
-Quadro K5100M (Kepler  sm_30) - 10 GB/s
-Drive PX2     (Pascal  sm_62) -  6 GB/s
+Quadro M4000M (Maxwell sm_52) - 28 GB/s <br>
+Quadro K5100M (Kepler  sm_30) - 10 GB/s <br>
+Drive PX2     (Pascal  sm_62) -  6 GB/s <br>
 
 
 
