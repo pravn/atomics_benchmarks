@@ -28,7 +28,7 @@ NUM_BINS   <br>
 NUM_THREADS_PER_BLOCK <br>
 
 
-Running:
+#Running:
 The executable will build in <build-dir>/histogram.
 Run as follows:
 cd <build-dir>/histogram
@@ -36,12 +36,9 @@ cd <build-dir>/histogram
 
 Example output: See example_output.txt
 
-Performance Numbers: <br>
+#Performance Numbers: <br>
 1. WORST_CASE with most contention <br>
-NOTE: We can use more blocks for better performance. 
-NUM_BLOCKS=256 <br>
-NUM_BINS=32    <br>
-NUM_THREADS_PER_BLOCK=256 <br>
+NOTE: We can use more blocks for better performance.  <br>
 NUM_BLOCKS=256 <br>
 NUM_BINS=32    <br>
 NUM_THREADS_PER_BLOCK=256
@@ -52,9 +49,6 @@ Drive PX2     (Pascal  sm_62) -  4.0 GB/s <br>
 
 2. More performant case with output generated to fall into any one of the bins randomly <br>
 Case with least contention <br>
-NUM_BLOCKS=256 <br>
-NUM_BINS=32    <br>
-NUM_THREADS_PER_BLOCK=256 <br>
 NUM_BLOCKS=256 <br>
 NUM_BINS=32    <br>
 NUM_THREADS_PER_BLOCK=256
