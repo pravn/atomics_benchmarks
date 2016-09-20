@@ -12,7 +12,7 @@ Building:
 Create a build directory and configure with cmake.
 
 mkdir bld <br>
-cmake \<path\/to\/src\>
+cmake \<path/to/src>
 
 We might have to modify paths to CUDA toolkit directory in CMakeLists. The gpu architecture flags will also need modification depending on the hardware it is run on. 
 
