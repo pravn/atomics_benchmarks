@@ -1,3 +1,9 @@
+Running with 
+NUM_BLOCKS=256
+NUM_BINS=32
+NUM_THREADS_PER_BLOCK=256
+with WORST_CASE flag turned on (all data falls on a single bin(==0)).
+
 Data Size 65536
 ======================================
 atomics time in milliseconds 0.025824
