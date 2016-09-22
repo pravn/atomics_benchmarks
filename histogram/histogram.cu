@@ -2,6 +2,7 @@
 #include <cuda.h>
 #include <iomanip>
 #include <Timer.h>
+#include <omp.h>
 
 //histogram with N bins in several blocks 
 //compute histogram using shared memory atomics
@@ -46,7 +47,7 @@ void run_atomics_reducer(int *h_data){
   cudaMemset(d_result_atomics, 0, NUM_BINS*sizeof(int));
 
   CUDATimer atomics_timer;
-  double time = 0;
+  double gpu_time = 0;
   int niter = 10;
 
 
@@ -55,27 +56,50 @@ void run_atomics_reducer(int *h_data){
 	  atomics_timer.startTimer();
 	  shmem_atomics_reducer<<< NUM_BLOCKS, NUM_THREADS_PER_BLOCK>>> (d_data, d_result_atomics);
 	  atomics_timer.stopTimer();
-	  time  += atomics_timer.getElapsedTime();
+	  gpu_time  += atomics_timer.getElapsedTime();
   }
 
-  for(int i=0; i<NUM_THREADS_PER_BLOCK*NUM_BLOCKS; i++){
-    for(int j=0; j<NUM_BINS; j++){
-      if(h_data[i]==j)
-	h_result[j]++;
-    }
-  }
+
+CPUTimer cpu_timer;
+double cpu_time = 0;
+
+ int nproc = omp_get_num_procs();
+
+ omp_set_num_threads(nproc);
+
+ std::cout << "Number of CPU cores for use in OpenMP " << nproc << std::endl;
+
+ for(int iter=0; iter<niter; iter++){
+   memset(h_result, 0, NUM_BINS*sizeof(int));
+   cpu_timer.startTimer();
+#pragma omp parallel for   
+   for(int i=0; i<NUM_THREADS_PER_BLOCK*NUM_BLOCKS; i++){
+     for(int j=0; j<NUM_BINS; j++){
+       if(h_data[i]==j){
+	 #pragma omp atomic
+	 h_result[j]++;
+       }
+     }
+   }
+   cpu_timer.stopTimer();
+   cpu_time  += cpu_timer.getElapsedTime();
+ }
+
 
   h_result_atomics = new int[NUM_BINS];
   cudaMemcpy(h_result_atomics, d_result_atomics, NUM_BINS*sizeof(int), cudaMemcpyDeviceToHost);
 
-  std::cout << "======================================" << std::endl;
-  std::cout << "average atomics time in milliseconds " << time/niter << std::endl;
+  std::cout << "=======================================" << std::endl;
+  std::cout << "Computed average atomics bandwidth for " << niter << " iterations " << std::endl;
+  std::cout << "Average GPU atomics time in milliseconds " << gpu_time/niter << std::endl;
+  std::cout << "Average CPU atomics time in milliseconds " << cpu_time/niter << std::endl;
 
   float mbytes = NUM_THREADS_PER_BLOCK*NUM_BLOCKS*sizeof(int)*1e-6;
 
   std::cout << "Megabytes of data " << mbytes << std::endl;
 
-   float bandwidth = mbytes/time*niter*1e3;
+   float gpu_bandwidth = mbytes/gpu_time*niter*1e3;
+   float cpu_bandwidth = mbytes/cpu_time*niter*1e3;
 
    #ifdef WORST_CASE
    std::cout << "Running worst case scenario where all data falls into a single bin " << std::endl;
@@ -83,7 +107,9 @@ void run_atomics_reducer(int *h_data){
    std::cout << "Running for case where data is distributed randomly into " << NUM_BINS << " bins " << std::endl;
    #endif 
 
-  std::cout << "Atomics bandwidth in MB/s " << bandwidth << std::endl;
+  std::cout << "GPU Atomics bandwidth in MB/s " << gpu_bandwidth << std::endl;
+  std::cout << "CPU Atomics bandwidth in MB/s " << cpu_bandwidth << std::endl;
+  
 
 
   std::cout << "Validation: " << std::endl;

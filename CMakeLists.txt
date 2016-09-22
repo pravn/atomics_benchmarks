@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 Project(cuda_experiments)
 FIND_PACKAGE(CUDA REQUIRED)
+FIND_PACKAGE(OpenMP REQUIRED)
+IF(OPENMP_FOUND)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+ENDIF() 
+
 INCLUDE_DIRECTORIES(include)
 
 #sm_30 - Kepler
